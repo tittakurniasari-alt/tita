@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galaxy Love Animation</title>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+
+  overflow:hidden;
+  height:100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:#000;
+
+}
+
+/* galaxy background */
+
+.stars{
+
+  position:absolute;
+
+  width:100%;
+  height:100%;
+
+  overflow:hidden;
+
+}
+
+.star{
+
+  position:absolute;
+
+  width:2px;
+  height:2px;
+
+  background:white;
+
+  border-radius:50%;
+
+  opacity:.8;
+
+  animation:
+  blink 2s infinite alternate;
+
+}
+
+@keyframes blink{
+
+  from{
+    opacity:.2;
+    transform:scale(.8);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1.4);
+  }
+
+}
+
+/* glow background */
+
+.nebula{
+
+  position:absolute;
+
+  width:600px;
+  height:600px;
+
+  border-radius:50%;
+
+  background:
+  radial-gradient(circle,
+  rgba(255,0,180,.18),
+  rgba(120,0,255,.08),
+  transparent 70%);
+
+  filter:blur(50px);
+
+}
+
+/* heart container */
+
+.container{
+
+  position:relative;
+
+  width:400px;
+  height:400px;
+
+}
+
+/* text */
+
+.love_word{
+
+  position:absolute;
+
+  color:#ff9adf;
+
+  font-size:18px;
+
+  font-weight:500;
+
+  white-space:nowrap;
+
+  text-shadow:
+  0 0 3px #fff,
+  0 0 8px #ff4fc3;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="nebula"></div>
+
+<div class="container" id="heart"></div>
+
+<script>
+
+/* stars */
+
+const stars =
+document.getElementById("stars");
+
+for(let i=0;i<180;i++){
+
+  const star =
+  document.createElement("div");
+
+  star.className = "star";
+
+  star.style.left =
+  Math.random()*100 + "%";
+
+  star.style.top =
+  Math.random()*100 + "%";
+
+  star.style.animationDelay =
+  Math.random()*2 + "s";
+
+  stars.appendChild(star);
+
+}
+
+/* heart shape */
+
+const heart =
+document.getElementById("heart");
+
+function createHeart(t){
+
+  const x =
+  16 * Math.pow(Math.sin(t),3);
+
+  const y =
+  13 * Math.cos(t)
+  - 5 * Math.cos(2*t)
+  - 2 * Math.cos(3*t)
+  - Math.cos(4*t);
+
+  return{
+
+    x:x * 11,
+
+    y:-y * 11
+
+  };
+
+}
+
+/* smooth flowing text */
+
+const total = 35;
+
+for(let i=0;i<total;i++){
+
+  const span =
+  document.createElement("span");
+
+  span.className =
+  "love_word";
+
+  span.innerText =
+  "I love you";
+
+  heart.appendChild(span);
+
+  animateText(span,i);
+
+}
+
+function animateText(el,index){
+
+  function update(){
+
+    const speed =
+    Date.now()*0.0005;
+
+    const t =
+    speed + index * 0.18;
+
+    const pos =
+    createHeart(t);
+
+    el.style.left =
+    `${200 + pos.x}px`;
+
+    el.style.top =
+    `${200 + pos.y}px`;
+
+    el.style.transform =
+    `translate(-50%,-50%)
+    rotate(${t*40}deg)`;
+
+    requestAnimationFrame(update);
+
+  }
+
+  update();
+
+}
+
+</script>
+
+</body>
+</html>
